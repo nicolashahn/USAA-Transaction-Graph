@@ -19,12 +19,15 @@ class Transaction:
     def __str__(self):
         return self.date+', '+self.name+', '+str(self.amount)
 
-def graph_transactions(transaction_list):
-    '''take a list of transaction objects, create a graph'''
+
+def graph_transactions(transaction_list, date_total=0):
+    '''
+    take a list of transaction objects, create a graph
+    date_total = starting balance of account
+    '''
     
     transaction_list_sorted = sorted(transaction_list, key=lambda x: x.date)
     date_totals = []
-    date_total = 0
     curr_date = transaction_list_sorted[0].date
     # the number of dates after the first date
     t_plus_date = 0
@@ -36,17 +39,18 @@ def graph_transactions(transaction_list):
             curr_date = transaction.date
             t_plus_date += 1
             date_total += transaction.amount
-    print(date_totals)
     t_plus_dates = [date_total[2] for date_total in date_totals]
     amounts = [date_total[1] for date_total in date_totals]
     plt.plot(t_plus_dates, amounts)
     plt.show()
+
 
 def main(transactions_csv=sys.argv[1]):
     with open(transactions_csv, 'r') as file:
         csv_lines = csv.reader(file.readlines())
         transactions = [Transaction(line[2],line[4],line[6]) for line in csv_lines if len(line) == 7]
     graph_transactions(transactions)
+
 
 if __name__ == "__main__":
     main()
