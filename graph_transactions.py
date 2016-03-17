@@ -35,7 +35,7 @@ def graph_transactions(transaction_list):
             date_totals.append((curr_date, date_total, t_plus_date))
             curr_date = transaction.date
             t_plus_date += 1
-            date_total = 0
+            date_total += transaction.amount
     print(date_totals)
     t_plus_dates = [date_total[2] for date_total in date_totals]
     amounts = [date_total[1] for date_total in date_totals]
