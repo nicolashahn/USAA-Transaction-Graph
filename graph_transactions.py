@@ -4,6 +4,8 @@
 # Nicolas Hahn
 # 2016.3.17
 
+# Usage: python graph_transactions.py <transactions.csv> <current_balance>
+
 import csv
 import sys
 import datetime
@@ -26,7 +28,7 @@ class Transaction:
 def graph_transactions(transaction_list, date_total=0):
     '''
     take a list of transaction objects, create a graph
-    date_total = current balance of account
+    date_total = current balance of account to date
     '''
     
     transaction_list_sorted = sorted(transaction_list, key=lambda x: x.date)
@@ -45,12 +47,15 @@ def graph_transactions(transaction_list, date_total=0):
     plt.show()
 
 
-def main(transactions_csv=sys.argv[1]):
+def main(transactions_csv, curr_balance):
     with open(transactions_csv, 'r') as file:
         csv_lines = csv.reader(file.readlines())
         transactions = [Transaction(line[2],line[4],line[6]) for line in csv_lines if len(line) == 7]
-    graph_transactions(transactions)
+    graph_transactions(transactions, curr_balance)
 
 
 if __name__ == "__main__":
-    main()
+    transactions_csv = sys.argv[1]
+    if len(sys.argv) == 3: curr_balance = int(sys.argv[2])
+    else: curr_balance = 0
+    main(transactions_csv, curr_balance)
