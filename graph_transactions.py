@@ -15,7 +15,7 @@ from matplotlib.dates import YearLocator, MonthLocator, DateFormatter
 class Transaction:
     '''store necessary information for a single transaction'''
     
-    def __init__(self,raw_date,name,amount):
+    def __init__(self, raw_date, name, amount):
         month, day, year = tuple(raw_date.split('/'))
         self.date = datetime.date(int(year), int(month), int(day))
         self.name = name
@@ -43,6 +43,7 @@ def graph_transactions(transaction_list, date_total=0):
             date_total += transaction.amount
     dates = [date_total[0] for date_total in date_totals]
     amounts = [date_total[1] for date_total in date_totals]
+    plt.rcParams["figure.figsize"] = (14,8)
     plt.plot(dates, amounts)
     plt.show()
 
@@ -56,6 +57,6 @@ def main(transactions_csv, curr_balance):
 
 if __name__ == "__main__":
     transactions_csv = sys.argv[1]
-    if len(sys.argv) == 3: curr_balance = int(sys.argv[2])
+    if len(sys.argv) == 3: curr_balance = float(sys.argv[2])
     else: curr_balance = 0
     main(transactions_csv, curr_balance)
