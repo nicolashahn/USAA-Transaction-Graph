@@ -69,7 +69,7 @@ def graph_transactions(transaction_list, date_total=0):
     plt.show()
 
 
-def main(transactions_csv, curr_balance):
+def main(transactions_csv, curr_balance, period):
 
     with open(transactions_csv, 'r') as file:
         csv_lines = csv.reader(file.readlines())
@@ -84,5 +84,4 @@ if __name__ == "__main__":
     transactions_csv = sys.argv[1]
     if len(sys.argv) >= 3: curr_balance = float(sys.argv[2])
     if len(sys.argv) >= 4: period = int(sys.argv[3])
-    main(transactions_csv, curr_balance)
-
+    main(transactions_csv, curr_balance, period)
