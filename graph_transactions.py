@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/local/bin/python3
 
 # Graph transactions from USAA account to monitor spending
 # Nicolas Hahn
@@ -46,24 +46,26 @@ def get_period_balance(transaction_list, period=period):
     return balance
 
 
-def graph_transactions(transaction_list, date_total=0):
+def graph_transactions(transaction_list, curr_balance=0):
     '''
     take a list of transaction objects, create a graph
-    date_total = current balance of account to date
+    curr_date_total = current balance of account to date
     '''
     
     transaction_list_sorted = sorted(transaction_list, key=lambda x: x.date)
     date_totals = []
+    date_total = 0
     curr_date = transaction_list_sorted[0].date
     for transaction in transaction_list_sorted:
-        if transaction.date == curr_date:
-            date_total += transaction.amount
-        else:
+        date_total += transaction.amount
+        if transaction.date != curr_date:
             date_totals.append((curr_date, date_total))
             curr_date = transaction.date
-            date_total += transaction.amount
-    dates = [dt[0] for dt in date_totals]
-    amounts = [dt[1] for dt in date_totals]
+    # difference between actual current balance and 'start from 0' balance
+    curr_diff = curr_balance - date_total
+    fixed_date_totals = [(dt[0],dt[1]+curr_diff) for dt in date_totals]
+    dates = [dt[0] for dt in fixed_date_totals]
+    amounts = [dt[1] for dt in fixed_date_totals]
     plt.rcParams["figure.figsize"] = (14,8)
     plt.plot(dates, amounts)
     plt.show()
