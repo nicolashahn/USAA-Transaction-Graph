@@ -16,6 +16,9 @@ from matplotlib.dates import YearLocator, MonthLocator, DateFormatter
 period = 7
 # current balance after all transactions, used to show accurate account balances for all transactions
 curr_balance = 0
+# ignore transfers to savings account (name='USAA FUNDS TRANSFER DB') - not relevant for checking overall cash flow
+ignore_savings_transfers = True
+
 
 class Transaction:
     '''store necessary information for a single transaction'''
@@ -57,10 +60,13 @@ def graph_transactions(transaction_list, curr_balance=0):
     date_total = 0
     curr_date = transaction_list_sorted[0].date
     for transaction in transaction_list_sorted:
-        date_total += transaction.amount
-        if transaction.date != curr_date:
-            date_totals.append((curr_date, date_total))
-            curr_date = transaction.date
+        if transaction.name == 'USAA FUNDS TRANSFER DB' and ignore_savings_transfers:
+            pass
+        else: 
+            date_total += transaction.amount
+            if transaction.date != curr_date:
+                date_totals.append((curr_date, date_total))
+                curr_date = transaction.date
     # difference between actual current balance and 'start from 0' balance
     curr_diff = curr_balance - date_total
     fixed_date_totals = [(dt[0],dt[1]+curr_diff) for dt in date_totals]
