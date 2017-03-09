@@ -12,6 +12,7 @@ import datetime
 import matplotlib.pyplot as plt
 from matplotlib.dates import YearLocator, MonthLocator, DateFormatter
 
+
 # default how many days back to calculate balance in get_period_balance()
 period = 7
 # current balance after all transactions, used to show accurate account balances for all transactions
@@ -26,21 +27,7 @@ class Transaction:
     def __init__(self, raw_date, name, amount):
         month, day, year = tuple(raw_date.split('/'))
         self.date = datetime.date(int(year), int(month), int(day))
-        self.name = name
-        self.amount = float(amount.replace('--',''))
-
-    def __str__(self):
-        return str(self.date)+', '+self.name+', '+str(self.amount)
-
-
-def get_period_balance(transaction_list, period=period):
-    '''takes transaction list and list of dates in a period and calculates balance'''
-   
-    #TODO: this currently uses the current date, have it use the last date in the transaction list
-    today = datetime.datetime.now()
-    period_dates = []
-    for day in range(1,period+1):
-        date = today - datetime.timedelta(day)
+        self.name = nam
         period_dates.append(datetime.date(date.year, date.month, date.day))
     balance = 0
     for transaction in transaction_list:
@@ -89,6 +76,7 @@ def main(transactions_csv, curr_balance, period):
 
 if __name__ == "__main__":
 
+    # TODO use pythonic method for flags
     transactions_csv = sys.argv[1]
     if len(sys.argv) >= 3: curr_balance = float(sys.argv[2])
     if len(sys.argv) >= 4: period = int(sys.argv[3])
